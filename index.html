@@ -41,7 +41,6 @@
         h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -1px; }
         .subtitle { font-size: 0.85rem; color: #666; font-weight: 500; margin-bottom: 30px; }
 
-        /* Upload Area */
         .upload-area {
             width: 100%;
             padding: 40px 20px;
@@ -55,21 +54,24 @@
         .upload-area:active { background: #f0f0f0; }
         .upload-text { font-weight: 800; color: #999; font-size: 0.9rem; }
 
-        /* Preview Window */
+        /* Preview Window - Modified to fit image size */
         .preview-wrapper {
             display: none;
             position: relative;
             width: 100%;
-            aspect-ratio: 9/16;
-            background: #000;
             border-radius: var(--radius);
             overflow: hidden;
             margin-bottom: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            line-height: 0; /* Remove extra gap under img */
         }
-        #userImg { width: 100%; height: 100%; object-fit: contain; }
+        #userImg { 
+            width: 100%; 
+            height: auto; 
+            display: block;
+        }
 
-        /* Safe Zone Overlays (CSS Based) */
+        /* Safe Zone Overlays */
         .overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -88,7 +90,6 @@
             text-transform: uppercase;
         }
 
-        /* Platform Tabs */
         .tabs {
             display: none;
             grid-template-columns: repeat(3, 1fr);
@@ -137,7 +138,7 @@
     <p class="subtitle">Check Safe Zones for TikTok, Reels & Shorts.</p>
 
     <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
-        <span class="upload-text">Tap to upload Screenshot (9:16)</span>
+        <span class="upload-text">Upload Screenshot</span>
         <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this.files[0])">
     </div>
 
@@ -198,7 +199,6 @@
             document.getElementById('userImg').src = e.target.result;
             document.getElementById('previewWrapper').style.display = 'block';
             document.getElementById('platformTabs').style.display = 'grid';
-            document.getElementById('dropZone').style.padding = '20px';
             document.querySelector('.upload-text').innerText = "Change Image";
             showOverlay('tiktok', document.querySelector('.tab-btn.active'));
         };
