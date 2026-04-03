@@ -15,8 +15,9 @@
             --accent: #eee;
             --input-bg: #fafafa;
             --radius: 15px;
-            --danger-bg: rgba(231, 76, 60, 0.4);
+            --danger-bg: rgba(231, 76, 60, 0.2); /* 透かしを強く修正 */
             --danger-border: rgba(231, 76, 60, 0.8);
+            --success-border: rgba(39, 174, 96, 0.8); /* 安全地帯用 */
         }
 
         body {
@@ -54,47 +55,18 @@
         .upload-area:active { background: #f0f0f0; }
         .upload-text { font-weight: 800; color: #999; font-size: 0.9rem; }
 
-        /* Preview Window - Modified to fit image size */
-        .preview-wrapper {
-            display: none;
-            position: relative;
-            width: 100%;
-            border-radius: var(--radius);
-            overflow: hidden;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            line-height: 0; /* Remove extra gap under img */
-        }
-        #userImg { 
-            width: 100%; 
-            height: auto; 
-            display: block;
-        }
-
-        /* Safe Zone Overlays */
-        .overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: none; pointer-events: none;
-        }
-        .danger-box {
-            position: absolute;
-            background: var(--danger-bg);
-            border: 1px solid var(--danger-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 0.6rem;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
-
+        /* Sticky Tabs */
         .tabs {
             display: none;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             margin-bottom: 20px;
+            position: sticky;
+            top: 10px;
+            z-index: 10;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(5px);
+            padding: 5px 0;
         }
         .tab-btn {
             padding: 12px 5px;
@@ -104,8 +76,54 @@
             font-weight: 800;
             font-size: 0.75rem;
             cursor: pointer;
+            -webkit-appearance: none;
         }
         .tab-btn.active { background: var(--main); color: #fff; }
+
+        .preview-wrapper {
+            display: none;
+            position: relative;
+            width: 100%;
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            line-height: 0;
+        }
+        #userImg { 
+            width: 100%; 
+            height: auto; 
+            display: block;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: none; pointer-events: none;
+        }
+        .danger-box {
+            position: absolute;
+            background: var(--danger-bg);
+            border: 2px solid var(--danger-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--danger-border);
+            font-size: 0.6rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        .safe-box {
+            position: absolute;
+            border: 2px dashed var(--success-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--success-border);
+            font-size: 0.6rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
 
         footer { margin-top: 50px; font-size: 11px; color: #aaa; line-height: 1.8; }
         .footer-btns { margin-top: 30px; }
@@ -135,7 +153,7 @@
 
 <div class="container">
     <h1>Post Guard</h1>
-    <p class="subtitle">Check Safe Zones for TikTok, Reels & Shorts.</p>
+    <p class="subtitle">Check UI Safe Zones for TikTok, Reels & Shorts.</p>
 
     <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
         <span class="upload-text">Upload Screenshot</span>
@@ -152,21 +170,24 @@
         <img id="userImg">
         
         <div class="overlay" id="tiktok-overlay">
-            <div class="danger-box" style="bottom:0; left:0; width:80%; height:18%;">Text / Info Area</div>
-            <div class="danger-box" style="bottom:15%; right:0; width:18%; height:45%;">Action Buttons</div>
-            <div class="danger-box" style="top:0; left:0; width:100%; height:12%;">Top Search / UI</div>
+            <div class="danger-box" style="bottom:0; left:0; width:80%; height:18%;">Text Area</div>
+            <div class="danger-box" style="bottom:15%; right:0; width:20%; height:45%;">Buttons</div>
+            <div class="danger-box" style="top:0; left:0; width:100%; height:12%;">Top UI</div>
+            <div class="safe-box" style="top:15%; left:10%; width:70%; height:60%;">Safe Zone</div>
         </div>
 
         <div class="overlay" id="reels-overlay">
-            <div class="danger-box" style="bottom:0; left:0; width:80%; height:15%;">Description Area</div>
-            <div class="danger-box" style="bottom:10%; right:0; width:15%; height:40%;">Actions</div>
-            <div class="danger-box" style="top:0; left:0; width:100%; height:10%;">Header UI</div>
+            <div class="danger-box" style="bottom:0; left:0; width:80%; height:15%;">Caption</div>
+            <div class="danger-box" style="bottom:10%; right:0; width:18%; height:40%;">Actions</div>
+            <div class="danger-box" style="top:0; left:0; width:100%; height:10%;">Header</div>
+            <div class="safe-box" style="top:15%; left:10%; width:70%; height:65%;">Safe Zone</div>
         </div>
 
         <div class="overlay" id="shorts-overlay">
             <div class="danger-box" style="bottom:0; left:0; width:75%; height:15%;">Title Area</div>
-            <div class="danger-box" style="bottom:5%; right:0; width:20%; height:50%;">Actions / Profile</div>
+            <div class="danger-box" style="bottom:5%; right:0; width:22%; height:50%;">Actions</div>
             <div class="danger-box" style="top:0; left:0; width:100%; height:8%;">Top UI</div>
+            <div class="safe-box" style="top:12%; left:8%; width:65%; height:75%;">Safe Zone</div>
         </div>
     </div>
 
